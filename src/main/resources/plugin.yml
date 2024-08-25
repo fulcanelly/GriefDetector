@@ -8,7 +8,9 @@ main: ${mainClass}
 
 load: STARTUP
 
-# softdepend:
+
+softdepend:
+  - tg-bridge
 #   - InviteSystemCore
 #   - LoginSecurity
   

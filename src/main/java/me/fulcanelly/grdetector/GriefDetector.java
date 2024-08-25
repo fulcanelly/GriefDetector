@@ -8,8 +8,12 @@ import java.util.Properties;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import lombok.SneakyThrows;
+import me.fulcanelly.grdetector.lib.ConnectionCreator;
 import me.fulcanelly.grdetector.lib.ConnectionTester;
 import me.fulcanelly.grdetector.listeners.ExplosionGriefListener;
+import me.fulcanelly.grdetector.warn.WarnDeduplicatorTgSender;
+import me.fulcanelly.grdetector.warn.WarningNotifier;
+import me.fulcanelly.tgbridge.Bridge;
 
 public class GriefDetector extends JavaPlugin {
 
@@ -24,11 +28,17 @@ public class GriefDetector extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    var coreProtect = getServer().getPluginManager().getPlugin("CoreProtect");
+    var pluginManager = getServer().getPluginManager();
+
+    var coreProtect = pluginManager.getPlugin("CoreProtect");
 
     if (coreProtect == null) {
       throw new RuntimeException("Need coreprotect");
     }
+
+    Bridge tgBridge = (Bridge) pluginManager.getPlugin("tg-bridge");
+
+    // me.fulcanelly.bri
 
     var dataFolder = coreProtect.getDataFolder();
 
@@ -39,12 +49,18 @@ public class GriefDetector extends JavaPlugin {
     var connection = createConnection(folder);
     new ConnectionTester(connection).testConnection();
 
+    ConnectionCreator connectionCreator = () -> createConnection(folder);
+
+    
+    var sender = new WarnDeduplicatorTgSender(tgBridge.getBot(), Long.valueOf(tgBridge.getMainConfig().getChatId()));
+    sender.start();
+    var warningNotifier = new WarningNotifier(connectionCreator, sender);
+
     getServer()
         .getPluginManager()
         .registerEvents(
-            new ExplosionGriefListener(() -> createConnection(folder)),
+            new ExplosionGriefListener(connectionCreator, warningNotifier),
             this);
   }
 
 }
-

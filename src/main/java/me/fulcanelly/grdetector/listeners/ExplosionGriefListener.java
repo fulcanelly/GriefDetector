@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import me.fulcanelly.grdetector.db.CoBlock;
-import me.fulcanelly.grdetector.sqlite.ConnectionCreator;
+import me.fulcanelly.grdetector.lib.ConnectionCreator;
 import me.fulcanelly.grdetector.warn.WarnEvent;
 import me.fulcanelly.grdetector.warn.WarningNotifier;
 

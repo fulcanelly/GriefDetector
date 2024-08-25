@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import me.fulcanelly.grdetector.db.CoBlock;
 import me.fulcanelly.grdetector.db.CoUser;
-import me.fulcanelly.grdetector.sqlite.ConnectionCreator;
+import me.fulcanelly.grdetector.lib.ConnectionCreator;
 
 @AllArgsConstructor
 public class WarningNotifier {

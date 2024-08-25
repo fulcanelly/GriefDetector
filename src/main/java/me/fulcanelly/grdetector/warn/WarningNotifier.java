@@ -10,17 +10,18 @@ import lombok.SneakyThrows;
 import me.fulcanelly.grdetector.db.CoBlock;
 import me.fulcanelly.grdetector.db.CoUser;
 import me.fulcanelly.grdetector.lib.ConnectionCreator;
+import me.fulcanelly.grdetector.warn.data.SimpleLocation;
+import me.fulcanelly.grdetector.warn.data.WarnEvent;
+import me.fulcanelly.grdetector.warn.data.WarnMessage;
+import me.fulcanelly.grdetector.warn.data.WorldType;
 
 @AllArgsConstructor
 public class WarningNotifier {
   ConnectionCreator connectionCreator;
-
-  static public WarningNotifier getInstance(ConnectionCreator cc) {
-    return new WarningNotifier(cc);
-  }
+  WarnDeduplicatorTgSender box;
 
   @SneakyThrows
-  public void notify(WarnEvent event, String user, List<CoBlock> blocks) {
+  public void notify(WarnEvent event, String user, List<CoBlock> blocks, int wid) {
     Comparator<CoBlock> xCompare = (a, b) -> a.getX() - b.getX();
     Comparator<CoBlock> yCompare = (a, b) -> a.getY() - b.getY();
     Comparator<CoBlock> zCompare = (a, b) -> a.getZ() - b.getZ();
@@ -45,6 +46,15 @@ public class WarningNotifier {
 
     conn.close();
 
+    box.addMessage(
+        new WarnMessage()
+            .withType(event)
+            .withSuspect(user)
+            .withVictims(victims)
+
+            .withStart(new SimpleLocation(fromX, fromY, fromZ, wtypeFromId(wid)))
+            .withEnd(new SimpleLocation(toX, toY, toZ, wtypeFromId(wid))));
+
     Bukkit.broadcastMessage(
         String.format(
             "x: %d..%d y: %d..%d z: %d..%d victims: %s suspect: %s\n",
@@ -53,5 +63,17 @@ public class WarningNotifier {
             fromZ, toZ,
             victims.toString(),
             user));
+  }
+
+  WorldType wtypeFromId(int id) {
+    if (id == 1) {
+      return WorldType.REGUALAR;
+    } else if (id == 2) {
+      return WorldType.NETHER;
+    } else if (id == 3) {
+      return WorldType.THE_END;
+    } else {
+      return WorldType.UNKNOWN;
+    }
   }
 }

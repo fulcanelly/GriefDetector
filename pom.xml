@@ -34,6 +34,13 @@
             <artifactId>java-ngrok</artifactId>
             <version>1.7.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.fulcanelly</groupId>
+            <artifactId>mctg-bridge</artifactId>
+            <scope>provided</scope>
+            <version>e1237a602ef923cf5b74d03e9f6ffd98168d3064</version>
+        </dependency>
+
 
         <!-- <dependency>
             <groupId>com.github.PlayPro</groupId>
@@ -145,10 +152,7 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>papermc</id>
-            <url>https://repo.papermc.io/repository/maven-public/</url>
-        </repository>
+
     </repositories>
     <build>
         <pluginManagement>

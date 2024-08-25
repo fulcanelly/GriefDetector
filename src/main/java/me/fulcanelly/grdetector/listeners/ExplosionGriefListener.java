@@ -11,16 +11,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.With;
 import me.fulcanelly.grdetector.db.CoBlock;
+import me.fulcanelly.grdetector.db.CoUser;
 import me.fulcanelly.grdetector.lib.ConnectionCreator;
-import me.fulcanelly.grdetector.warn.WarnEvent;
 import me.fulcanelly.grdetector.warn.WarningNotifier;
+import me.fulcanelly.grdetector.warn.data.WarnEvent;
 
 @AllArgsConstructor
+@With
+@NoArgsConstructor
 public class ExplosionGriefListener implements Listener {
 
   ConnectionCreator connectionCreator;
+  WarningNotifier warningNotifier;
 
   @EventHandler
   void onExplosion(EntityExplodeEvent event) {
@@ -44,20 +50,33 @@ public class ExplosionGriefListener implements Listener {
       return;
     }
     try (var conn = connectionCreator.create()) {
+      var targetUser = CoUser.findByName(conn, primer.getName());
 
       var brokenBlocks = blocks.stream()
           .map(it -> CoBlock.findBlockHistory(conn, it.getX(), it.getY(), it.getZ(), wid))
           .filter(it -> it != null)
+          .filter(it -> it.getUserId() != targetUser.getId())
           .distinct()
           .toList();
+
+      var victims = brokenBlocks.stream()
+          .map(CoBlock::getUserId)
+          .distinct()
+          .map(it -> CoUser.findById(conn, it).getName())
+          .filter(it -> !it.startsWith("#"))
+          .toList();
+
+      if (victims.isEmpty()) {
+        return;
+      }
 
       if (brokenBlocks.isEmpty()) {
         return;
       }
 
-      WarningNotifier.getInstance(connectionCreator).notify(
+      warningNotifier.notify(
           WarnEvent.TNT_EXPLOSION,
-          primer.getName(), brokenBlocks);
+          primer.getName(), brokenBlocks, wid);
     }
   }
 
@@ -86,21 +105,34 @@ public class ExplosionGriefListener implements Listener {
     var name = player.getName();
 
     try (var conn = connectionCreator.create()) {
+      var targetUser = CoUser.findByName(conn, name);
 
       var brokenBlocks = blocks.stream()
           .map(it -> CoBlock.findBlockHistory(conn, it.getX(), it.getY(), it.getZ(), wid))
           .filter(it -> it != null)
+          .filter(it -> it.getUserId() != targetUser.getId())
           .distinct()
           .toList();
+
+      var victims = brokenBlocks.stream()
+          .map(CoBlock::getUserId)
+          .distinct()
+          .map(it -> CoUser.findById(conn, it).getName())
+          .filter(it -> !it.startsWith("#"))
+          .toList();
+
+      if (victims.isEmpty()) {
+        return;
+      }
 
       if (brokenBlocks.isEmpty()) {
         return;
       }
 
-      WarningNotifier.getInstance(connectionCreator).notify(
+      warningNotifier.notify(
           WarnEvent.CREEPER_EXPLOSION,
           name,
-          brokenBlocks);
+          brokenBlocks, wid);
     }
   }
 }

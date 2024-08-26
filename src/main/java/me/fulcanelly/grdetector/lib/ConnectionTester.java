@@ -18,8 +18,9 @@ class ConnectionTester {
     var rs = stmt.executeQuery(sql);
 
     while (rs.next()) {
-      System.out.printf("%d\n",
-          rs.getInt("X"));
+      if (rs.getInt("X") != 1) {
+        throw new RuntimeException("Something wrong with db connection");
+      }
     }
   }
 

@@ -1,9 +1,6 @@
 package me.fulcanelly.grdetector.warn.data;
 
 public enum WorldType {
-
-
-
   REGUALAR {
     @Override
     public String toString() {
@@ -22,6 +19,5 @@ public enum WorldType {
       return "-край-";
     }
   },
-  UNKNOWN,
-  
+  UNKNOWN,  
 }

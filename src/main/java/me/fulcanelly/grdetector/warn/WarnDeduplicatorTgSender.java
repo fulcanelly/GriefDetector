@@ -21,7 +21,6 @@ public class WarnDeduplicatorTgSender {
   final TGBot bot;
   final Long targetChatId;
 
-
   Map<String, Long> timeToSendByName = new HashMap<>();
   Map<String, WarnMessage> messagesBySuspectName = new HashMap<>();
 
@@ -74,6 +73,7 @@ public class WarnDeduplicatorTgSender {
       timeToSendByName.put(key, System.currentTimeMillis() + 5000);
       var oldMessage = messagesBySuspectName.get(key);
 
+      oldMessage.setTimes(oldMessage.getTimes() + 1);
       oldMessage.setStart(oldMessage.getStart().min(message.getStart()));
       oldMessage.setEnd(oldMessage.getEnd().max(message.getEnd()));
       oldMessage.setVictims(

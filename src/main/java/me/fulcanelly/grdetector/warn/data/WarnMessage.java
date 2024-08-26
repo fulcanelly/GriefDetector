@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 
 @With
-@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +19,7 @@ public class WarnMessage {
   WarnEvent type;
   SimpleLocation start;
   SimpleLocation end;
+  int times = 1;
 
   String position() {
     return String.format(
@@ -27,6 +27,13 @@ public class WarnMessage {
         start.x, end.x,
         start.y, end.y,
         start.z, end.z, start.worldType.toString());
+  }
+
+  String explosionCount() {
+    if (times == 1) {
+      return "";
+    }
+    return "вибухів зафіксовано - " + times + "\n";
   }
 
   public String pretty() {
@@ -44,6 +51,7 @@ public class WarnMessage {
           "гравець під ніком " + suspect + " підірвав TNT на кординатах \n" +
           position() +
           "За цими кординатами були будівлі таких гравців - " + victims.toString() + "\n" +
+          explosionCount() +
           " -- повіддомленя може бути помилковим";
     }
 

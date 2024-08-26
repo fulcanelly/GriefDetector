@@ -1,7 +1,7 @@
 # Grief Detector 
 
 ![GitHub Tag](https://img.shields.io/github/v/tag/fulcanelly/GriefDetector)
-<a href="https://github.com/fulcanelly/mctg-bridge/releases/"><img src="https://img.shields.io/github/downloads/fulcanelly/GriefDetector/total.svg" alt="GitHub All Releases"/></a>
+<a href="https://github.com/fulcanelly/GriefDetector/releases/"><img src="https://img.shields.io/github/downloads/fulcanelly/GriefDetector/total.svg" alt="GitHub All Releases"/></a>
 <img src="https://img.shields.io/github/stars/fulcanelly/GriefDetector"/>
 ![GitHub Build](https://img.shields.io/github/actions/workflow/status/fulcanelly/GriefDetector/main.yml?branch=master)
 

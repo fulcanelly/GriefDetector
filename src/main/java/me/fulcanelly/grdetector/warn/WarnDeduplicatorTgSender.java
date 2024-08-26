@@ -41,7 +41,7 @@ public class WarnDeduplicatorTgSender {
     var currentTime = System.currentTimeMillis();
 
     return timeToSendByName.entrySet().stream()
-        .filter(pair -> pair.getValue() > currentTime)
+        .filter(pair -> pair.getValue() < currentTime)
         .map(Entry::getKey)
         .toList();
   }
@@ -72,8 +72,8 @@ public class WarnDeduplicatorTgSender {
       return;
     } else {
       timeToSendByName.put(key, System.currentTimeMillis() + 5000);
+      var oldMessage = messagesBySuspectName.get(key);
 
-      var oldMessage = messagesBySuspectName.get(suspect);
       oldMessage.setStart(oldMessage.getStart().min(message.getStart()));
       oldMessage.setEnd(oldMessage.getEnd().max(message.getEnd()));
       oldMessage.setVictims(

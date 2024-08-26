@@ -1,20 +1,15 @@
 package me.fulcanelly.grdetector.warn;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import me.fulcanelly.grdetector.warn.data.WarnEvent;
 import me.fulcanelly.grdetector.warn.data.WarnMessage;
 import me.fulcanelly.tgbridge.tapi.TGBot;
-import me.fulcanelly.tgbridge.tools.MainConfig;
 
 @RequiredArgsConstructor
 public class WarnDeduplicatorTgSender {

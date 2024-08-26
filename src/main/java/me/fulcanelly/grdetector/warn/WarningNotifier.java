@@ -3,8 +3,6 @@ package me.fulcanelly.grdetector.warn;
 import java.util.Comparator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import me.fulcanelly.grdetector.db.CoBlock;

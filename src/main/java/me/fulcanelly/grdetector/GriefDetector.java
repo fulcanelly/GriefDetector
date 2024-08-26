@@ -4,11 +4,11 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
+import java.util.function.Supplier;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import lombok.SneakyThrows;
-import me.fulcanelly.grdetector.lib.ConnectionCreator;
 import me.fulcanelly.grdetector.lib.ConnectionTester;
 import me.fulcanelly.grdetector.listeners.ExplosionGriefListener;
 import me.fulcanelly.grdetector.warn.WarnDeduplicatorTgSender;
@@ -38,8 +38,6 @@ public class GriefDetector extends JavaPlugin {
 
     Bridge tgBridge = (Bridge) pluginManager.getPlugin("tg-bridge");
 
-    // me.fulcanelly.bri
-
     var dataFolder = coreProtect.getDataFolder();
 
     getLogger().info(dataFolder.getAbsolutePath());
@@ -49,7 +47,7 @@ public class GriefDetector extends JavaPlugin {
     var connection = createConnection(folder);
     new ConnectionTester(connection).testConnection();
 
-    ConnectionCreator connectionCreator = () -> createConnection(folder);
+    Supplier<Connection> connectionCreator = () -> createConnection(folder);
 
     
     var sender = new WarnDeduplicatorTgSender(tgBridge.getBot(), Long.valueOf(tgBridge.getMainConfig().getChatId()));

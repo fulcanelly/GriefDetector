@@ -1,6 +1,9 @@
 package me.fulcanelly.grdetector.listeners;
 
+import java.sql.Connection;
 import java.util.List;
+import java.util.function.Supplier;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -16,7 +19,6 @@ import lombok.SneakyThrows;
 import lombok.With;
 import me.fulcanelly.grdetector.db.CoBlock;
 import me.fulcanelly.grdetector.db.CoUser;
-import me.fulcanelly.grdetector.lib.ConnectionCreator;
 import me.fulcanelly.grdetector.warn.WarningNotifier;
 import me.fulcanelly.grdetector.warn.data.WarnEvent;
 
@@ -25,7 +27,7 @@ import me.fulcanelly.grdetector.warn.data.WarnEvent;
 @NoArgsConstructor
 public class ExplosionGriefListener implements Listener {
 
-  ConnectionCreator connectionCreator;
+  Supplier<Connection> connectionCreator;
   WarningNotifier warningNotifier;
 
   @EventHandler
@@ -49,7 +51,7 @@ public class ExplosionGriefListener implements Listener {
     if (primer == null) {
       return;
     }
-    try (var conn = connectionCreator.create()) {
+    try (var conn = connectionCreator.get()) {
       var targetUser = CoUser.findByName(conn, primer.getName());
 
       var brokenBlocks = blocks.stream()
@@ -104,7 +106,7 @@ public class ExplosionGriefListener implements Listener {
 
     var name = player.getName();
 
-    try (var conn = connectionCreator.create()) {
+    try (var conn = connectionCreator.get()) {
       var targetUser = CoUser.findByName(conn, name);
 
       var brokenBlocks = blocks.stream()

@@ -1,13 +1,14 @@
 package me.fulcanelly.grdetector.warn;
 
+import java.sql.Connection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import me.fulcanelly.grdetector.db.CoBlock;
 import me.fulcanelly.grdetector.db.CoUser;
-import me.fulcanelly.grdetector.lib.ConnectionCreator;
 import me.fulcanelly.grdetector.warn.data.SimpleLocation;
 import me.fulcanelly.grdetector.warn.data.WarnEvent;
 import me.fulcanelly.grdetector.warn.data.WarnMessage;
@@ -15,7 +16,7 @@ import me.fulcanelly.grdetector.warn.data.WorldType;
 
 @AllArgsConstructor
 public class WarningNotifier {
-  ConnectionCreator connectionCreator;
+  Supplier<Connection> connectionCreator;
   WarnDeduplicatorTgSender box;
 
   @SneakyThrows
@@ -33,7 +34,7 @@ public class WarningNotifier {
     var fromZ = blocks.stream().min(zCompare).get().getZ();
     var toZ = blocks.stream().max(zCompare).get().getZ();
 
-    var conn = connectionCreator.create();
+    var conn = connectionCreator.get();
     var victims = blocks.stream()
         .map(CoBlock::getUserId)
         .distinct()

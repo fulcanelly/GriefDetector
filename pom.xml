@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.fulcanelly</groupId>
     <artifactId>GriefDetector</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <name>GriefDetector</name>
     <description>Grief Detector</description>

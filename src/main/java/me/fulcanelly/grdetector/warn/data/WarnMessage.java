@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import static me.fulcanelly.tgbridge.utils.UsefulStuff.escapeMarkdown;;
 
 @With
 @Data
@@ -35,21 +36,21 @@ public class WarnMessage {
     return "вибухів зафіксовано - " + times + "\n";
   }
 
-  public String pretty() {
+  public String prettyMarkdown() {
     if (type == WarnEvent.CREEPER_EXPLOSION) {
-      return "Увага! Гравець " + suspect + " зачепив кріпера, який підірвав блоки на координатах:\n" +
+      return "Увага! Гравець " + escapeMarkdown(suspect) + " зачепив кріпера, який підірвав блоки на координатах:\n" +
           position() +
           "Під вибух потрапили будівлі таких гравців - " +
-          String.join(", ", victims) + "\n" +
+          String.join(", ", escapeMarkdown(victims.toString())) + "\n" +
           " -- повідомлення може бути помилковим";
     }
 
     if (type == WarnEvent.TNT_EXPLOSION) {
 
       return "Отакої... здається завівся гріфер:\n" +
-          "гравець під ніком " + suspect + " підірвав TNT на кординатах \n" +
+          "гравець під ніком " + escapeMarkdown(suspect) + " підірвав TNT на кординатах \n" +
           position() +
-          "За цими кординатами були будівлі таких гравців - " + victims.toString() + "\n" +
+          "За цими кординатами були будівлі таких гравців - " + escapeMarkdown(victims.toString()) + "\n" +
           explosionCount() +
           " -- повіддомленя може бути помилковим";
     }

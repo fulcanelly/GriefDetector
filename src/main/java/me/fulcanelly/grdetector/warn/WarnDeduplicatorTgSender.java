@@ -83,6 +83,6 @@ public class WarnDeduplicatorTgSender {
   }
 
   void send(WarnMessage message) {
-    bot.sendMessage(targetChatId, message.pretty());
+    bot.sendMessage(targetChatId, message.prettyMarkdown());
   }
 }

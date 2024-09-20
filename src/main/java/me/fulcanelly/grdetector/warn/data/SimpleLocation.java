@@ -1,5 +1,7 @@
 package me.fulcanelly.grdetector.warn.data;
 
+import org.bukkit.Location;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,4 +32,7 @@ public class SimpleLocation {
         worldType);
   }
 
+  public Location toRealLocation() {
+    return new Location(null, x, y, z);
+  }
 }
